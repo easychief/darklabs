@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Darklabs — Studio de développement</title>
+  <meta name="description" content="Darklabs : applications mobiles & desktop, sites web. Vitrine simple, esthétique futuriste avec micro-animations." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0c0d11; --bg-2:#0e1016; --fg:#e9ebf1; --muted:#9aa2b1;
+      --line:#1c202a; --card:#12141b; --ring:#cfd6e6; --accent:#e5e9f6;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--fg);
+      font-family:'Montserrat',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,'Helvetica Neue',Arial,sans-serif;
+      background:
+        radial-gradient(1000px 600px at 80% -10%, rgba(167,186,220,.08), transparent 60%),
+        radial-gradient(700px 500px at 10% 10%, rgba(167,186,220,.06), transparent 60%),
+        linear-gradient(180deg,var(--bg),var(--bg-2));
+      overflow-x:hidden;
+    }
+    .gridfx{position:fixed; inset:0; pointer-events:none; z-index:0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size: 46px 46px; opacity:.6;
+      mask: radial-gradient(80% 60% at 50% 0%, rgba(0,0,0,.8), rgba(0,0,0,0));
+      animation: gridPan 30s linear infinite;
+    }
+    @keyframes gridPan { 0%{background-position:0 0,0 0} 100%{background-position:800px 0,0 800px} }
+    .orbs{position:fixed; inset: -10% -10% auto -10%; height: 60vh; pointer-events:none; z-index:0; filter: blur(40px) saturate(120%);
+      background:
+        radial-gradient(300px 220px at 20% 30%, rgba(180,200,255,.08), transparent 60%),
+        radial-gradient(240px 200px at 80% 20%, rgba(255,255,255,.06), transparent 60%);
+      animation: orbsFloat 18s ease-in-out infinite alternate;
+    }
+    @keyframes orbsFloat { from{transform: translateY(-10px)} to{transform: translateY(10px)} }
+
+    header{position:sticky; top:0; z-index:20; border-bottom:1px solid var(--line);
+      background: clamp(0px, 20vh, 80px) linear-gradient(180deg, rgba(18,20,28,.7), rgba(18,20,28,.45));
+      backdrop-filter: blur(10px) saturate(120%);
+    }
+    .container{width:min(1120px,92vw); margin:0 auto}
+    .nav{display:flex; align-items:center; justify-content:space-between; padding: 14px 0}
+    .brand{display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--fg)}
+    .brand img{width:42px; height:42px; object-fit:contain; filter: drop-shadow(0 6px 24px rgba(197,210,244,.18));}
+    .brand span{font-weight:800; letter-spacing:.4px}
+    .links{display:flex; gap:18px; align-items:center}
+    .links a{color:var(--muted); text-decoration:none; font-weight:700; font-size:14px; padding:8px 10px; border-radius:10px}
+    .links a:hover{color:var(--fg); background: #151926}
+    .cta{position:relative; display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:14px; text-decoration:none; font-weight:800; color:#0b0d14; background:linear-gradient(180deg,#f5f7ff,#cfd6e6); border:1px solid rgba(255,255,255,.6); box-shadow: 0 10px 40px rgba(197,210,244,.25)}
+    .cta::after{content:""; position:absolute; inset:0; border-radius:inherit; box-shadow: 0 0 0 0 rgba(207,214,230,.85); animation: pulse 2.2s ease-out infinite;}
+    @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(207,214,230,.7)} 100%{box-shadow:0 0 0 18px rgba(207,214,230,0)} }
+
+    .hero{position:relative; z-index:1; padding: clamp(68px, 10vw, 140px) 0 80px; text-align:center}
+    .ring{ --s: clamp(220px, 34vw, 520px); position:relative; width:var(--s); height:var(--s); margin: 0 auto 18px; border-radius:50%;
+      background:
+        conic-gradient(from 0deg, rgba(230,236,255,.28), rgba(230,236,255,.04) 40%, rgba(230,236,255,.28) 80%, rgba(230,236,255,.04) 100%),
+        radial-gradient(closest-side, rgba(255,255,255,.08), rgba(255,255,255,0));
+      box-shadow: 0 0 0 1px rgba(255,255,255,.07) inset, 0 30px 120px rgba(180,200,255,.08);
+      animation: spin 16s linear infinite;
+    }
+    .ring::before{content:""; position:absolute; inset:14%; border-radius:50%; border:1px dashed rgba(255,255,255,.15); filter: drop-shadow(0 0 24px rgba(230,236,255,.08)); animation: spinReverse 22s linear infinite}
+    @keyframes spin { to{ transform: rotate(360deg)} }
+    @keyframes spinReverse { to{ transform: rotate(-360deg)} }
+
+    /* logo avec nudge (remonté) + responsive */
+    .hero-logo{
+      --nudge:-16px;
+      position:absolute; inset:0;
+      width:min(72vmin,340px); height:auto; margin:auto;
+      filter: drop-shadow(0 10px 40px rgba(197,210,244,.16));
+      animation: float 6s ease-in-out infinite alternate;
+    }
+    @keyframes float{
+      from{ transform: translateY(calc(var(--nudge) - 6px)); }
+      to  { transform: translateY(calc(var(--nudge) + 6px)); }
+    }
+
+    h1{font-size: clamp(36px, 6vw, 72px); line-height:1.04; margin: 10px 0 8px; letter-spacing:.3px}
+    .sub{color:var(--muted); font-size: clamp(14px, 2.2vw, 18px); max-width: 70ch; margin: 0 auto}
+    .hero-actions{display:flex; justify-content:center; gap:12px; margin-top:24px; flex-wrap:wrap}
+    .ghost{display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:14px; color:var(--fg); text-decoration:none; border:1px solid var(--line); background:#121620}
+    .ghost:hover{background:#151b27}
+
+    section{ padding:78px 0; border-top: 1px solid var(--line); position:relative; z-index:1 }
+    .section-head{text-align:center; margin-bottom: 22px}
+    .section-head h2{ margin:0 0 8px; font-size: clamp(22px,3.4vw,36px)}
+    .section-head p{ margin:0; color:var(--muted)}
+
+    .cards{ display:grid; grid-template-columns: repeat(2,1fr); gap:16px }
+    .card{ position:relative; background: linear-gradient(180deg, #12141b, #0f1219); border:1px solid var(--line); border-radius:18px; padding:22px; text-align:center; overflow:hidden }
+    .card::after{ content:""; position:absolute; inset:-1px; border-radius:18px; background: conic-gradient(from 0deg, rgba(230,236,255,.18), transparent 30%, rgba(230,236,255,.18) 60%, transparent 90%); mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; padding:1px; opacity:.0; transition:opacity .3s ease }
+    .card:hover::after{ opacity:.9 }
+    .card h3{ margin:6px 0 6px; font-size:18px }
+    .card p{ margin:0; color:var(--muted) }
+
+    .band{ position:relative; border:1px solid var(--line); border-radius:20px; padding:26px; background: linear-gradient(180deg, #11141c, #0f1219); overflow:hidden }
+    .band .scan{ position:absolute; inset:-50% -10% auto -10%; height: 160%; pointer-events:none; background: linear-gradient(90deg, transparent 0%, rgba(230,236,255,.08) 45%, rgba(230,236,255,.18) 50%, rgba(230,236,255,.08) 55%, transparent 100%); transform: translateX(-100%); animation: scan 6s ease-in-out infinite }
+    @keyframes scan { 0%{ transform: translateX(-100%)} 50%{ transform: translateX(0%)} 100%{ transform: translateX(100%)} }
+
+    .ref-link{
+      display:grid; grid-template-columns:auto 1fr; gap:16px; align-items:center;
+      text-decoration:none; color:inherit;
+    }
+    .ref-link:hover{ filter: brightness(1.05); }
+    .ref-link img{ transition: transform .2s ease; }
+    .ref-link:hover img{ transform: translateY(-1px); }
+
+    .contact-card{ background: linear-gradient(180deg, #12141b, #0f1219); border:1px solid var(--line); border-radius:18px; padding:22px; text-align:center }
+    .contact-card a{ color:var(--accent); font-weight:800; text-decoration:underline }
+
+    footer{ color:var(--muted); text-align:center }
+    /* footer responsive (lignes qui passent l’une sous l’autre) */
+    .site-footer{
+      border-top:1px solid var(--line);
+      background:#0f131d;
+    }
+    .site-footer .footer-inner{
+      width:min(1120px,92vw); margin:0 auto;
+      padding:20px 16px;
+      display:flex; flex-wrap:wrap; gap:12px 16px; justify-content:center; align-items:center;
+    }
+    .site-footer a{ color:#e9ebf1; text-decoration:none }
+    .site-footer a:hover{ text-decoration:underline }
+    .site-footer .sep{ color:#566; opacity:.6 }
+    @media (max-width:720px){
+      .site-footer .footer-inner{ flex-direction:column; gap:8px }
+      .site-footer .sep{ display:none }
+    }
+
+    .reveal{ opacity:0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease }
+    .reveal.show{ opacity:1; transform: none }
+
+    @media (prefers-reduced-motion: reduce){
+      .gridfx,.orbs,.ring,.ring::before,.hero-logo,.band .scan,.cta::after{ animation:none }
+    }
+
+    /* Responsiveness hero */
+    @media (max-width:1024px){ .hero-logo{ width:min(56vmin,360px); --nudge:-10px } }
+    @media (max-width:760px){
+      .ring{ --s: min(68vw, 380px); margin-bottom: 28px; }
+      .hero-logo{ width: min(52vw, 240px); --nudge: -6px; }
+      .hero{ padding-bottom: 96px; }
+    }
+    @media (max-width:520px){
+      .ring{ --s: 64vw; margin-bottom: 36px; }
+      .hero-logo{ width: min(50vw, 200px); --nudge: -4px; }
+    }
+    @media (max-width: 760px){ .cards{ grid-template-columns:1fr } }
+  </style>
+</head>
+<body>
+  <div class="gridfx" aria-hidden="true"></div>
+  <div class="orbs" aria-hidden="true"></div>
+
+  <header>
+    <div class="container nav">
+      <a class="brand" href="#">
+        <img src="./images/Darklabs.png" alt="Logo Darklabs" />
+        <span>Darklabs</span>
+      </a>
+      <nav class="links">
+        <a href="#services">Services</a>
+        <a href="#reference">Référence</a>
+ 
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="ring" aria-hidden="true"></div>
+    <img class="hero-logo" src="./images/Darklabs.png" alt="Logo Darklabs" />
+    <h1>Darklabs</h1>
+    <p class="sub">Applications mobiles & desktop. Sites web vitrines. Simplicité — avec une touche futuriste.</p>
+    <div class="hero-actions">
+      <a class="ghost" href="#services">Voir les services</a>
+      <a class="cta" href="#contact">Contact</a>
+    </div>
+  </section>
+
+  <section id="services" class="reveal">
+    <div class="container">
+      <div class="section-head">
+        <h2>Services</h2>
+        <p>Essentiel, sans bla-bla.</p>
+      </div>
+      <div class="cards">
+        <article class="card">
+          <h3>Applications mobiles & desktop</h3>
+          <p>Conception • Développement</p>
+        </article>
+        <article class="card">
+          <h3>Sites web</h3>
+          <p>Vitrines modernes</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="reference" class="reveal">
+    <div class="container">
+      <div class="section-head">
+        <h2>Référence</h2>
+        <p>Projet sélectionné.</p>
+      </div>
+      <div class="band">
+        <div class="scan" aria-hidden="true"></div>
+        <a href="https://www.easychief.fr" target="_blank" rel="noopener noreferrer" class="ref-link">
+          <img src="./images/Darklabs.png" alt="Logo EasyChief (exemple)" width="64" height="64" style="filter:grayscale(1); opacity:.9;"/>
+          <div>
+            <div style="font-weight:800; font-size:18px">EasyChief</div>
+            <div style="color:var(--muted)">Application opérationnelle pour sapeurs-pompiers développée par Darklabs.</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="reveal">
+    <div class="container">
+      <div class="section-head">
+        <h2>Contacts</h2>
+        <p>Réponse rapide.</p>
+      </div>
+      <div class="contact-card">
+        <p>Écrivez à <a href="mailto:contact@darklabs.fr">contact@darklabs.fr</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER responsive -->
+  <footer class="site-footer" aria-label="Pied de page">
+    <div class="footer-inner">
+      <a href="./politique-confidentialite.html">Politique de confidentialité</a>
+      <span class="sep" aria-hidden="true">•</span>
+      <a href="./politique-cookies.html">Politique de cookies</a>
+      <span class="sep" aria-hidden="true">•</span>
+      <a href="./mentions-legales.html">Mentions légales</a>
+      <span class="sep" aria-hidden="true">•</span>
+      <a href="#">© <span id="year"></span> Darklabs — Tous droits réservés</a>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const io = new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('show') }) }, { threshold: .12 });
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  </script>
+</body>
+</html>

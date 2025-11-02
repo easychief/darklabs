@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Darklabs — Politique de confidentialité</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{ --bg:#0c0d11; --bg-2:#0e1016; --fg:#e9ebf1; --muted:#9aa2b1; --line:#1c202a; --card:#12141b; }
+    *{box-sizing:border-box} html,body{height:100%}
+    body{
+      margin:0; color:var(--fg); font-family:'Montserrat',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,'Helvetica Neue',Arial,sans-serif;
+      background:
+        radial-gradient(1000px 600px at 80% -10%, rgba(167,186,220,.08), transparent 60%),
+        radial-gradient(700px 500px at 10% 10%, rgba(167,186,220,.06), transparent 60%),
+        linear-gradient(180deg,var(--bg),var(--bg-2));
+    }
+    .gridfx{position:fixed; inset:0; pointer-events:none; z-index:0;
+      background-image:linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size:46px 46px; opacity:.6; mask: radial-gradient(80% 60% at 50% 0%, rgba(0,0,0,.8), rgba(0,0,0,0));
+      animation: gridPan 30s linear infinite;
+    }
+    @keyframes gridPan { 0%{background-position:0 0,0 0} 100%{background-position:800px 0,0 800px} }
+
+    header{position:sticky; top:0; z-index:20; border-bottom:1px solid var(--line);
+      background: clamp(0px,20vh,80px) linear-gradient(180deg, rgba(18,20,28,.7), rgba(18,20,28,.45)); backdrop-filter: blur(10px) saturate(120%);
+    }
+    .container{width:min(1120px,92vw); margin:0 auto}
+    .nav{display:flex; align-items:center; justify-content:space-between; padding:14px 0}
+    .brand{display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--fg)}
+    .brand img{width:36px; height:36px; object-fit:contain}
+    .brand span{font-weight:800}
+    .links{display:flex; gap:16px}
+    .links a{color:var(--muted); text-decoration:none; font-weight:700; font-size:14px; padding:8px 10px; border-radius:10px}
+    .links a:hover{color:var(--fg); background:#151926}
+
+    main{ position:relative; z-index:1; padding: 42px 0 80px; }
+    h1{ text-align:center; margin: 24px 0 10px; font-size: clamp(30px,5vw,48px); letter-spacing:.3px }
+    .lead{ text-align:center; color:var(--muted); margin:0 0 24px }
+    .card{ background:linear-gradient(180deg,#12141b,#0f1219); border:1px solid var(--line); border-radius:16px; padding: clamp(16px,3vw,28px); box-shadow:0 6px 22px rgba(0,0,0,.25) }
+    .card p{ margin:10px 0; line-height:1.75; color:#cfd4de }
+    .card h2{ margin:18px 0 8px; font-size: clamp(18px,2.6vw,24px) }
+    .card ul{ margin:8px 0 8px 1.2em }
+
+    .site-footer{ border-top:1px solid var(--line); background:#0f131d; color:#e9ebf1 }
+    .site-footer .footer-inner{ width:min(1120px,92vw); margin:0 auto; padding:20px 16px; display:flex; flex-wrap:wrap; gap:12px 16px; justify-content:center; align-items:center; }
+    .site-footer a{ color:#e9ebf1; text-decoration:none } .site-footer a:hover{ text-decoration:underline }
+    .sep{ color:#566; opacity:.6 }
+    @media (max-width:720px){ .site-footer .footer-inner{flex-direction:column; gap:8px} .sep{display:none} }
+    /* Tous les liens mailto en blanc, partout */
+a[href^="mailto:"],
+a[href^="mailto:"]:visited {
+  color: #fff;
+  text-decoration: underline;
+}
+a[href^="mailto:"]:hover { opacity: .85; }
+
+  </style>
+</head>
+<body>
+  <div class="gridfx" aria-hidden="true"></div>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="./index.html">
+        <img src="./images/Darklabs.png" alt="Logo Darklabs"><span>Darklabs</span>
+      </a>
+      <nav class="links">
+        <a href="./index.html#services">Services</a>
+        <a href="./index.html#reference">Référence</a>
+        <a href="./index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>Politique de confidentialité</h1>
+    <p class="lead">Comment nous traitons les données lorsque vous utilisez nos services.</p>
+
+    <article class="card">
+      <h2>1. Qui sommes-nous ?</h2>
+      <p>Éditeur : <strong>Darklabs (EI)</strong> — 88 rue de Jarlard, 81000 Albi — France.<br>
+         Contact : <a href="mailto:contact@darklabs.fr">contact@darklabs.fr</a></p>
+
+      <h2>2. Portée</h2>
+      <p>Cette politique s’applique au site darklabs.fr et aux éventuels services associés.</p>
+
+      <h2>3. Principes</h2>
+      <ul>
+        <li>Pas de revente de données.</li>
+        <li>Données limitées au strict nécessaire.</li>
+        <li>Transparence et sécurité.</li>
+      </ul>
+
+      <h2>4. Données traitées</h2>
+      <ul>
+        <li>Journaux techniques minimaux (diagnostic, sécurité).</li>
+        <li>Échanges par e-mail si vous nous contactez.</li>
+      </ul>
+
+      <h2>5. Vos droits (RGPD)</h2>
+      <p>Accès, rectification, effacement, opposition, limitation, portabilité.  
+         Exercez vos droits à <a href="mailto:contact@darklabs.fr">contact@darklabs.fr</a>.</p>
+
+      <h2>6. Sécurité</h2>
+      <p>Mesures techniques et organisationnelles raisonnables (chiffrement en transit, contrôle d’accès).</p>
+
+      <h2>7. Modifications</h2>
+      <p>Cette politique peut évoluer. Date de dernière mise à jour : <script>document.write(new Date().toLocaleDateString('fr-FR'))</script>.</p>
+    </article>
+  </main>
+
+  <footer class="site-footer" aria-label="Pied de page">
+    <div class="footer-inner">
+      <a href="./politique-confidentialite.html">Politique de confidentialité</a>
+      <span class="sep" aria-hidden="true">•</span>
+      <a href="./politique-cookies.html">Politique de cookies</a>
+      <span class="sep" aria-hidden="true">•</span>
+      <a href="./mentions-legales.html">Mentions légales</a>
+      <span class="sep" aria-hidden="true">•</span>
+      <a href="./index.html">© <script>document.write(new Date().getFullYear())</script> Darklabs — Tous droits réservés</a>
+    </div>
+  </footer>
+</body>
+</html>
