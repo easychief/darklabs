@@ -1,255 +1,999 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
+  <title>Darklabs – Studio de développement</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Darklabs — Studio de développement</title>
-  <meta name="description" content="Darklabs : applications mobiles & desktop, sites web. Vitrine simple, esthétique futuriste avec micro-animations." />
+  <meta name="description" content="Darklabs : studio de développement d’applications mobiles & desktop et de sites web vitrines, avec une esthétique futuriste et minimaliste." />
+
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
   <style>
-    :root{
-      --bg:#0c0d11; --bg-2:#0e1016; --fg:#e9ebf1; --muted:#9aa2b1;
-      --line:#1c202a; --card:#12141b; --ring:#cfd6e6; --accent:#e5e9f6;
+    :root {
+      --bg-color: #0d1018c5;
+      --bg-alt: #0b0f16;
+      --accent: #6ea5ff;
+      --accent-soft: rgba(110, 165, 255, 0.18);
+      --accent-soft-2: rgba(110, 165, 255, 0.35);
+      --text-main: #f7f9ff;
+      --text-muted: #9aa4b8;
+      --border-soft: rgba(255, 255, 255, 0.12);
+      --shadow-soft: 0 18px 45px rgba(1, 5, 20, 0.85);
+      --radius-lg: 18px;
+      --radius-pill: 999px;
+      --max-width: 1120px;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; color:var(--fg);
-      font-family:'Montserrat',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,'Helvetica Neue',Arial,sans-serif;
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: "Montserrat", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background:
-        radial-gradient(1000px 600px at 80% -10%, rgba(167,186,220,.08), transparent 60%),
-        radial-gradient(700px 500px at 10% 10%, rgba(167,186,220,.06), transparent 60%),
-        linear-gradient(180deg,var(--bg),var(--bg-2));
-      overflow-x:hidden;
+        radial-gradient(circle at top right, #2a3b63 0, transparent 55%),
+        radial-gradient(circle at 10% 20%, rgba(120, 150, 230, 0.14) 0, transparent 46%),
+        linear-gradient(180deg, #050609, #050609 18%, #0b0f16 100%);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
     }
-    .gridfx{position:fixed; inset:0; pointer-events:none; z-index:0;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* Effet grille légère en fond */
+    .gridfx {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
       background-image:
-        linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
-      background-size: 46px 46px; opacity:.6;
-      mask: radial-gradient(80% 60% at 50% 0%, rgba(0,0,0,.8), rgba(0,0,0,0));
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 46px 46px;
+      opacity: 0.5;
+      mask: radial-gradient(80% 60% at 50% -10%, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0));
       animation: gridPan 30s linear infinite;
     }
-    @keyframes gridPan { 0%{background-position:0 0,0 0} 100%{background-position:800px 0,0 800px} }
-    .orbs{position:fixed; inset: -10% -10% auto -10%; height: 60vh; pointer-events:none; z-index:0; filter: blur(40px) saturate(120%);
+
+    @keyframes gridPan {
+      0% { background-position: 0 0, 0 0; }
+      100% { background-position: 800px 0, 0 800px; }
+    }
+
+    /* Layout général */
+
+    .page {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page-inner {
+      flex: 1;
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 16px 16px 32px;
+    }
+
+    /* Header */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px) saturate(130%);
+      background: linear-gradient(
+        to bottom,
+        rgba(5, 6, 9, 0.94),
+        rgba(5, 6, 9, 0.7),
+        transparent
+      );
+      border-bottom: 1px solid var(--border-soft);
+    }
+
+    .header-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      border: 1px solid rgba(110, 165, 255, 0.65);
       background:
-        radial-gradient(300px 220px at 20% 30%, rgba(180,200,255,.08), transparent 60%),
-        radial-gradient(240px 200px at 80% 20%, rgba(255,255,255,.06), transparent 60%);
-      animation: orbsFloat 18s ease-in-out infinite alternate;
+        radial-gradient(circle at 20% 0, #ffffff 0, #a4c0ff 16%, transparent 40%),
+        radial-gradient(circle at 80% 100%, #27395c 0, #02040a 60%);
+      box-shadow: 0 12px 36px rgba(83, 135, 255, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #02040a;
     }
-    @keyframes orbsFloat { from{transform: translateY(-10px)} to{transform: translateY(10px)} }
 
-    header{position:sticky; top:0; z-index:20; border-bottom:1px solid var(--line);
-      background: clamp(0px, 20vh, 80px) linear-gradient(180deg, rgba(18,20,28,.7), rgba(18,20,28,.45));
-      backdrop-filter: blur(10px) saturate(120%);
+    .brand-text-title {
+      font-size: 18px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
     }
-    .container{width:min(1120px,92vw); margin:0 auto}
-    .nav{display:flex; align-items:center; justify-content:space-between; padding: 14px 0}
-    .brand{display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--fg)}
-    .brand img{width:42px; height:42px; object-fit:contain; filter: drop-shadow(0 6px 24px rgba(197,210,244,.18));}
-    .brand span{font-weight:800; letter-spacing:.4px}
-    .links{display:flex; gap:18px; align-items:center}
-    .links a{color:var(--muted); text-decoration:none; font-weight:700; font-size:14px; padding:8px 10px; border-radius:10px}
-    .links a:hover{color:var(--fg); background: #151926}
-    .cta{position:relative; display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:14px; text-decoration:none; font-weight:800; color:#0b0d14; background:linear-gradient(180deg,#f5f7ff,#cfd6e6); border:1px solid rgba(255,255,255,.6); box-shadow: 0 10px 40px rgba(197,210,244,.25)}
-    .cta::after{content:""; position:absolute; inset:0; border-radius:inherit; box-shadow: 0 0 0 0 rgba(207,214,230,.85); animation: pulse 2.2s ease-out infinite;}
-    @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(207,214,230,.7)} 100%{box-shadow:0 0 0 18px rgba(207,214,230,0)} }
 
-    .hero{position:relative; z-index:1; padding: clamp(68px, 10vw, 140px) 0 80px; text-align:center}
-    .ring{ --s: clamp(220px, 34vw, 520px); position:relative; width:var(--s); height:var(--s); margin: 0 auto 18px; border-radius:50%;
+    .brand-text-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 13px;
+    }
+
+    .nav-links a {
+      padding: 6px 11px;
+      border-radius: var(--radius-pill);
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 11px;
+    }
+
+    .nav-links a:hover {
+      border-color: var(--border-soft);
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .nav-primary {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .nav-primary:hover {
+      background: var(--accent-soft-2);
+    }
+
+    .nav-toggle {
+      display: none;
+      border: 1px solid var(--border-soft);
+      border-radius: 999px;
+      padding: 6px 9px;
+      background: rgba(5, 6, 9, 0.9);
+      cursor: pointer;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: #ffffff;
+      border-radius: 999px;
+      position: relative;
+    }
+
+    .nav-toggle span::before,
+    .nav-toggle span::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 18px;
+      height: 2px;
+      background: #ffffff;
+      border-radius: 999px;
+    }
+
+    .nav-toggle span::before {
+      top: -5px;
+    }
+
+    .nav-toggle span::after {
+      top: 5px;
+    }
+
+    /* Hero */
+
+    .hero {
+      padding-top: 40px;
+      padding-bottom: 40px;
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.4fr);
+      gap: 32px;
+      align-items: center;
+    }
+
+    .hero-main {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      align-items: center;
+      text-align: center;
+    }
+
+    .hero-pill {
+      padding: 6px 18px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--accent);
+      background: rgba(5, 6, 9, 0.96);
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .hero-title {
+      font-size: clamp(32px, 4vw, 42px);
+      line-height: 1.12;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .hero-subtitle {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--text-muted);
+    }
+
+    .hero-tagline {
+      margin-top: 12px;
+      font-size: 15px;
+      max-width: 540px;
+      color: var(--text-main);
+    }
+
+    .hero-tagline span {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .hero-actions {
+      margin-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 10px 18px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-soft);
+      font-size: 13px;
+      cursor: pointer;
+      background: rgba(5, 6, 9, 0.9);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      border-color: var(--accent);
+      background: linear-gradient(135deg, #9abcff, #6ea5ff);
+      color: #02040a;
+      font-weight: 700;
+      box-shadow: 0 12px 28px rgba(1, 5, 20, 0.8);
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.04);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      color: var(--text-muted);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-main);
+    }
+
+    .hero-note {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Hero visuel */
+
+    .hero-visual {
+      position: relative;
+      min-height: 260px;
+    }
+
+    .hero-card {
+      position: relative;
+      border-radius: 22px;
+      padding: 16px;
       background:
-        conic-gradient(from 0deg, rgba(230,236,255,.28), rgba(230,236,255,.04) 40%, rgba(230,236,255,.28) 80%, rgba(230,236,255,.04) 100%),
-        radial-gradient(closest-side, rgba(255,255,255,.08), rgba(255,255,255,0));
-      box-shadow: 0 0 0 1px rgba(255,255,255,.07) inset, 0 30px 120px rgba(180,200,255,.08);
-      animation: spin 16s linear infinite;
-    }
-    .ring::before{content:""; position:absolute; inset:14%; border-radius:50%; border:1px dashed rgba(255,255,255,.15); filter: drop-shadow(0 0 24px rgba(230,236,255,.08)); animation: spinReverse 22s linear infinite}
-    @keyframes spin { to{ transform: rotate(360deg)} }
-    @keyframes spinReverse { to{ transform: rotate(-360deg)} }
-
-    /* logo avec nudge (remonté) + responsive */
-    .hero-logo{
-      --nudge:-16px;
-      position:absolute; inset:0;
-      width:min(72vmin,340px); height:auto; margin:auto;
-      filter: drop-shadow(0 10px 40px rgba(197,210,244,.16));
-      animation: float 6s ease-in-out infinite alternate;
-    }
-    @keyframes float{
-      from{ transform: translateY(calc(var(--nudge) - 6px)); }
-      to  { transform: translateY(calc(var(--nudge) + 6px)); }
+        radial-gradient(circle at top left, #a7bfff 0, #1c2740 38%, #050609 100%);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
-    h1{font-size: clamp(36px, 6vw, 72px); line-height:1.04; margin: 10px 0 8px; letter-spacing:.3px}
-    .sub{color:var(--muted); font-size: clamp(14px, 2.2vw, 18px); max-width: 70ch; margin: 0 auto}
-    .hero-actions{display:flex; justify-content:center; gap:12px; margin-top:24px; flex-wrap:wrap}
-    .ghost{display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:14px; color:var(--fg); text-decoration:none; border:1px solid var(--line); background:#121620}
-    .ghost:hover{background:#151b27}
-
-    section{ padding:78px 0; border-top: 1px solid var(--line); position:relative; z-index:1 }
-    .section-head{text-align:center; margin-bottom: 22px}
-    .section-head h2{ margin:0 0 8px; font-size: clamp(22px,3.4vw,36px)}
-    .section-head p{ margin:0; color:var(--muted)}
-
-    .cards{ display:grid; grid-template-columns: repeat(2,1fr); gap:16px }
-    .card{ position:relative; background: linear-gradient(180deg, #12141b, #0f1219); border:1px solid var(--line); border-radius:18px; padding:22px; text-align:center; overflow:hidden }
-    .card::after{ content:""; position:absolute; inset:-1px; border-radius:18px; background: conic-gradient(from 0deg, rgba(230,236,255,.18), transparent 30%, rgba(230,236,255,.18) 60%, transparent 90%); mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; padding:1px; opacity:.0; transition:opacity .3s ease }
-    .card:hover::after{ opacity:.9 }
-    .card h3{ margin:6px 0 6px; font-size:18px }
-    .card p{ margin:0; color:var(--muted) }
-
-    .band{ position:relative; border:1px solid var(--line); border-radius:20px; padding:26px; background: linear-gradient(180deg, #11141c, #0f1219); overflow:hidden }
-    .band .scan{ position:absolute; inset:-50% -10% auto -10%; height: 160%; pointer-events:none; background: linear-gradient(90deg, transparent 0%, rgba(230,236,255,.08) 45%, rgba(230,236,255,.18) 50%, rgba(230,236,255,.08) 55%, transparent 100%); transform: translateX(-100%); animation: scan 6s ease-in-out infinite }
-    @keyframes scan { 0%{ transform: translateX(-100%)} 50%{ transform: translateX(0%)} 100%{ transform: translateX(100%)} }
-
-    .ref-link{
-      display:grid; grid-template-columns:auto 1fr; gap:16px; align-items:center;
-      text-decoration:none; color:inherit;
-    }
-    .ref-link:hover{ filter: brightness(1.05); }
-    .ref-link img{ transition: transform .2s ease; }
-    .ref-link:hover img{ transform: translateY(-1px); }
-
-    .contact-card{ background: linear-gradient(180deg, #12141b, #0f1219); border:1px solid var(--line); border-radius:18px; padding:22px; text-align:center }
-    .contact-card a{ color:var(--accent); font-weight:800; text-decoration:underline }
-
-    footer{ color:var(--muted); text-align:center }
-    /* footer responsive (lignes qui passent l’une sous l’autre) */
-    .site-footer{
-      border-top:1px solid var(--line);
-      background:#0f131d;
-    }
-    .site-footer .footer-inner{
-      width:min(1120px,92vw); margin:0 auto;
-      padding:20px 16px;
-      display:flex; flex-wrap:wrap; gap:12px 16px; justify-content:center; align-items:center;
-    }
-    .site-footer a{ color:#e9ebf1; text-decoration:none }
-    .site-footer a:hover{ text-decoration:underline }
-    .site-footer .sep{ color:#566; opacity:.6 }
-    @media (max-width:720px){
-      .site-footer .footer-inner{ flex-direction:column; gap:8px }
-      .site-footer .sep{ display:none }
+    .hero-card-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 10% 0, rgba(255, 255, 255, 0.18) 0, transparent 42%),
+        radial-gradient(circle at 80% 100%, rgba(110, 165, 255, 0.45) 0, transparent 60%);
+      pointer-events: none;
+      mix-blend-mode: screen;
     }
 
-    .reveal{ opacity:0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease }
-    .reveal.show{ opacity:1; transform: none }
-
-    @media (prefers-reduced-motion: reduce){
-      .gridfx,.orbs,.ring,.ring::before,.hero-logo,.band .scan,.cta::after{ animation:none }
+    .hero-card-header {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 12px;
     }
 
-    /* Responsiveness hero */
-    @media (max-width:1024px){ .hero-logo{ width:min(56vmin,360px); --nudge:-10px } }
-    @media (max-width:760px){
-      .ring{ --s: min(68vw, 380px); margin-bottom: 28px; }
-      .hero-logo{ width: min(52vw, 240px); --nudge: -6px; }
-      .hero{ padding-bottom: 96px; }
+    .hero-card-title {
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
     }
-    @media (max-width:520px){
-      .ring{ --s: 64vw; margin-bottom: 36px; }
-      .hero-logo{ width: min(50vw, 200px); --nudge: -4px; }
+
+    .hero-card-tag {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(5, 6, 9, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
-    @media (max-width: 760px){ .cards{ grid-template-columns:1fr } }
+
+    .hero-card-body {
+      position: relative;
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--text-main);
+    }
+
+    .hero-logo-image {
+      width: 52%;
+      max-width: 220px;
+      height: auto;
+      display: block;
+      margin: 0 auto 10px auto;
+      filter: drop-shadow(0 12px 32px rgba(10, 18, 40, 0.9));
+    }
+
+    .hero-badges {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 11px;
+    }
+
+    .hero-badge {
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(230, 236, 255, 0.4);
+      background: rgba(5, 6, 9, 0.76);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+
+    .hero-card-footer {
+      position: relative;
+      margin-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .status-pill {
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(144, 189, 255, 0.6);
+      background: rgba(5, 6, 9, 0.75);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #9fe870;
+      box-shadow: 0 0 0 4px rgba(159, 232, 112, 0.15);
+    }
+
+    /* Section générique (encadrés) */
+
+    .section {
+      margin-top: 46px;
+      padding: 22px 18px;
+      border-radius: var(--radius-lg);
+      background:
+        radial-gradient(circle at top left, rgba(125, 155, 230, 0.22) 0, var(--bg-color) 45%),
+        radial-gradient(circle at bottom right, rgba(2, 11, 30, 0.95) 0, var(--bg-color) 60%);
+      border: 1px solid var(--border-soft);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .section-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+      align-items: baseline;
+    }
+
+    .section-kicker {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+    }
+
+    .section-title {
+      font-size: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+    }
+
+    .section-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      max-width: 420px;
+    }
+
+    /* Services */
+
+    .services-grid {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .service-card {
+      padding: 14px 14px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border-soft);
+      background: linear-gradient(145deg, #080b11, #050609);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+    }
+
+    .service-title {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .service-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Référence (layout type “projet phare”) */
+
+    .reference-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.3fr);
+      gap: 18px;
+      margin-top: 10px;
+    }
+
+    .reference-frame {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border-soft);
+      background: radial-gradient(circle at top left, #a7bfff 0, #050609 60%);
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+
+    .reference-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .project-title {
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill {
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-soft);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-muted);
+      background: rgba(5, 6, 9, 0.9);
+    }
+
+    .reference-link {
+      font-size: 13px;
+    }
+
+    .reference-link a {
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .reference-link a:hover {
+      color: #c9d7ff;
+    }
+
+    /* Section “À propos” */
+
+    .about-grid {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      gap: 18px;
+      font-size: 13px;
+    }
+
+    .about-grid p {
+      margin-bottom: 8px;
+    }
+
+    .about-card {
+      border-radius: 14px;
+      border: 1px solid var(--border-soft);
+      background: radial-gradient(circle at top, rgba(138, 173, 255, 0.15) 0, #050609 55%);
+      padding: 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Contact & mentions */
+
+    .social-contact {
+      margin-top: 30px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+    }
+
+    .email {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      color: var(--text-muted);
+    }
+
+    .email span:first-child {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+    }
+
+    .email a {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .legal-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 12px;
+    }
+
+    .legal-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    .legal-links a:hover {
+      text-decoration: underline;
+      color: var(--accent);
+    }
+
+    /* Footer */
+
+    footer {
+      border-top: 1px solid var(--border-soft);
+      padding: 12px 16px 18px;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    footer a {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+      color: var(--accent);
+    }
+
+    /* Responsive */
+
+    @media (max-width: 860px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .hero-main {
+        order: 1;
+      }
+
+      .hero-visual {
+        order: 2;
+      }
+
+      .reference-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .about-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .header-inner {
+        padding-inline: 12px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .nav-toggle {
+        display: inline-flex;
+      }
+
+      .hero {
+        padding-top: 28px;
+      }
+
+      .page-inner {
+        padding-inline: 12px;
+      }
+
+      .section {
+        padding-inline: 14px;
+      }
+
+      .services-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .social-contact {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .gridfx {
+        animation: none;
+      }
+    }
   </style>
-</head>
-<body>
-  <div class="gridfx" aria-hidden="true"></div>
-  <div class="orbs" aria-hidden="true"></div>
-
-  <header>
-    <div class="container nav">
-      <a class="brand" href="#">
-        <img src="./images/Darklabs.png" alt="Logo Darklabs" />
-        <span>Darklabs</span>
-      </a>
-      <nav class="links">
-        <a href="#services">Services</a>
-        <a href="#reference">Référence</a>
- 
-      </nav>
-    </div>
-  </header>
-
-  <section class="hero">
-    <div class="ring" aria-hidden="true"></div>
-    <img class="hero-logo" src="./images/Darklabs.png" alt="Logo Darklabs" />
-    <h1>Darklabs</h1>
-    <p class="sub">Applications mobiles & desktop. Sites web vitrines. Simplicité — avec une touche futuriste.</p>
-    <div class="hero-actions">
-      <a class="ghost" href="#services">Voir les services</a>
-      <a class="cta" href="#contact">Contact</a>
-    </div>
-  </section>
-
-  <section id="services" class="reveal">
-    <div class="container">
-      <div class="section-head">
-        <h2>Services</h2>
-        <p>Essentiel, sans bla-bla.</p>
-      </div>
-      <div class="cards">
-        <article class="card">
-          <h3>Applications mobiles & desktop</h3>
-          <p>Conception • Développement</p>
-        </article>
-        <article class="card">
-          <h3>Sites web</h3>
-          <p>Vitrines modernes</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <section id="reference" class="reveal">
-    <div class="container">
-      <div class="section-head">
-        <h2>Référence</h2>
-        <p>Projet sélectionné.</p>
-      </div>
-      <div class="band">
-        <div class="scan" aria-hidden="true"></div>
-        <a href="https://www.easychief.fr" target="_blank" rel="noopener noreferrer" class="ref-link">
-          <img src="./images/Darklabs.png" alt="Logo EasyChief (exemple)" width="64" height="64" style="filter:grayscale(1); opacity:.9;"/>
-          <div>
-            <div style="font-weight:800; font-size:18px">EasyChief</div>
-            <div style="color:var(--muted)">Application opérationnelle pour sapeurs-pompiers développée par Darklabs.</div>
-          </div>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <section id="contact" class="reveal">
-    <div class="container">
-      <div class="section-head">
-        <h2>Contacts</h2>
-        <p>Réponse rapide.</p>
-      </div>
-      <div class="contact-card">
-        <p>Écrivez à <a href="mailto:contact@darklabs.fr">contact@darklabs.fr</a></p>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER responsive -->
-  <footer class="site-footer" aria-label="Pied de page">
-    <div class="footer-inner">
-      <a href="./politique-confidentialite.html">Politique de confidentialité</a>
-      <span class="sep" aria-hidden="true">•</span>
-      <a href="./politique-cookies.html">Politique de cookies</a>
-      <span class="sep" aria-hidden="true">•</span>
-      <a href="./mentions-legales.html">Mentions légales</a>
-      <span class="sep" aria-hidden="true">•</span>
-      <a href="#">© <span id="year"></span> Darklabs — Tous droits réservés</a>
-    </div>
-  </footer>
 
   <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-    const io = new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('show') }) }, { threshold: .12 });
-    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+    document.addEventListener("DOMContentLoaded", function () {
+      // Menu mobile très simple
+      const toggle = document.querySelector(".nav-toggle");
+      const links = document.querySelector(".nav-links");
+
+      if (toggle && links) {
+        toggle.addEventListener("click", function () {
+          const isOpen = links.style.display === "flex";
+          links.style.display = isOpen ? "none" : "flex";
+        });
+      }
+
+      // Année dynamique dans le pied de page
+      var yearSpan = document.getElementById("year");
+      if (yearSpan) {
+        yearSpan.textContent = new Date().getFullYear();
+      }
+    });
   </script>
+</head>
+
+<body>
+  <div class="gridfx" aria-hidden="true"></div>
+
+  <div class="page">
+    <header>
+      <div class="header-inner">
+        <a href="#top" class="brand">
+          <div class="brand-logo">D</div>
+          <div>
+            <div class="brand-text-title">Darklabs</div>
+            <div class="brand-text-sub">Studio de développement</div>
+          </div>
+        </a>
+
+       
+      </div>
+    </header>
+
+    <main class="page-inner" id="top">
+      <!-- Hero -->
+      <section class="hero">
+        <div class="hero-main">
+          <div class="hero-pill">Studio Darklabs</div>
+
+          <p class="hero-subtitle">
+            Applications mobiles &amp; desktop · Sites web vitrines
+          </p>
+
+          <h1 class="hero-title">Simplicité, efficacité, esthétique futuriste</h1>
+
+          <p class="hero-tagline">
+            Darklabs conçoit et développe des applications et sites web
+            <span>clairs, rapides et élégants</span>, avec un soin particulier apporté aux micro-interactions et à l’expérience utilisateur.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#services" class="btn btn-primary">
+              Voir les services
+            </a>
+            <a href="#reference" class="btn btn-ghost">
+              Découvrir la référence EasyChief
+            </a>
+          </div>
+
+          <p class="hero-note">
+            Développement sur mesure · Mobile, desktop &amp; web · Collaboration directe.
+          </p>
+        </div>
+
+        <div class="hero-visual">
+          <div class="hero-card">
+            <div class="hero-card-overlay"></div>
+
+            <div class="hero-card-header">
+              <div>
+                <div class="hero-card-title">Darklabs – Studio de développement</div>
+                <br />
+                <div class="hero-card-tag">Applications · Web · Expérience utilisateur</div>
+              </div>
+              <div class="status-pill">
+                <span class="status-dot"></span>
+                <span>Disponible pour nouveaux projets</span>
+              </div>
+            </div>
+
+            <div class="hero-card-body">
+              <img
+                src="./images/Darklabs.png"
+                alt="Logo Darklabs"
+                class="hero-logo-image"
+              />
+
+              <div class="hero-badges">
+                <span class="hero-badge">Mobile &amp; desktop</span>
+                <span class="hero-badge">Sites vitrines</span>
+                <span class="hero-badge">Design minimal</span>
+              </div>
+
+              <div class="hero-card-footer">
+                <span>Conception, développement &amp; suivi technique.</span>
+                <span>Focus : simplicité &amp; lisibilité.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Services -->
+      <section class="section" id="services">
+        <div class="section-header">
+          <div>
+            <div class="section-kicker">Services</div>
+            <h2 class="section-title">Ce que propose Darklabs</h2>
+          </div>
+          <p class="section-subtitle">
+            Un socle volontairement simple, sans jargon inutile : uniquement ce qui est utile à votre projet.
+          </p>
+        </div>
+
+        <div class="services-grid">
+          <div class="service-card">
+            <div class="service-title">Applications mobiles &amp; desktop</div>
+            <div class="service-meta">
+              Conception et développement d’applications
+              orientées métier ou grand public, avec un seul objectif :
+              un outil clair, robuste et agréable à utiliser.
+            </div>
+          </div>
+
+          <div class="service-card">
+            <div class="service-title">Sites web vitrines</div>
+            <div class="service-meta">
+              Sites vitrines modernes, soignés et rapides pour
+              présenter une activité, une application ou un projet
+              avec un design épuré et une touche futuriste.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Référence -->
+      <section class="section" id="reference">
+        <div class="section-header">
+          <div>
+            <div class="section-kicker">Référence</div>
+            <h2 class="section-title">Projet développé par Darklabs</h2>
+          </div>
+          <p class="section-subtitle">
+            Un exemple concret d’application conçue et développée par Darklabs.
+          </p>
+        </div>
+
+        <div class="reference-layout">
+          <div class="reference-frame">
+            <img
+              src="./images/cover.png"
+              alt="Logo EasyChief"
+              style="width: 100%; height: auto; opacity: 0.95; filter: grayscale(0.1);"
+            />
+          </div>
+
+          <div class="reference-meta">
+            <div>
+              <div class="project-title">EasyChief</div>
+            </div>
+
+            <div class="pill-row">
+              <div class="pill">Application opérationnelle</div>
+              <div class="pill">Sapeurs-pompiers</div>
+              <div class="pill">Développée par Darklabs</div>
+            </div>
+
+            <p>
+              EasyChief est une application opérationnelle dédiée aux sapeurs-pompiers,
+              développée par Darklabs. Elle regroupe plusieurs modules pensés pour le terrain
+              et centralise des outils qui, auparavant, étaient dispersés.
+            </p>
+
+            <p class="reference-link">
+              Découvrir le projet :
+              <a href="https://www.easychief.fr" target="_blank" rel="noopener noreferrer">
+                www.easychief.fr
+              </a>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- À propos -->
+      <section class="section" id="about">
+        <div class="section-header">
+          <div>
+            <div class="section-kicker">À propos</div>
+            <h2 class="section-title">Darklabs</h2>
+          </div>
+          <p class="section-subtitle">
+            Un studio de développement orienté vers des interfaces sobres, efficaces et durables.
+          </p>
+        </div>
+
+        <div class="about-grid">
+          <div>
+            <p>
+              Darklabs se concentre sur des projets où la clarté, la lisibilité
+              et l’usage concret passent avant l’effet de mode. L’objectif :
+              proposer des interfaces simples à prendre en main, mais suffisamment
+              robustes pour accompagner les besoins du quotidien.
+            </p>
+            <p>
+              Que ce soit pour une application mobile, un outil desktop ou un site
+              vitrine, le même soin est apporté à l’ergonomie, aux animations
+              discrètes et à l’identité visuelle globale.
+            </p>
+          </div>
+
+          <div class="about-card">
+            <p>
+              <strong>En pratique :</strong><br />
+              • Développement d’applications mobiles &amp; desktop<br />
+              • Création de sites web vitrines modernes<br />
+              • Mise en avant des usages réels plutôt que du superflu<br />
+              • Collaboration directe, sans intermédiaire
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact & mentions -->
+      <section class="social-contact" id="contact">
+        <div class="email">
+          <span>Contact</span>
+          <a href="mailto:contact@darklabs.fr">contact@darklabs.fr</a>
+        </div>
+
+        <div class="legal-links" aria-label="Liens légaux">
+          <a href="./politique-confidentialite.html">Politique de confidentialité</a>
+          <a href="./politique-cookies.html">Politique de cookies</a>
+          <a href="./mentions-legales.html">Mentions légales</a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      © <span id="year"></span> – Darklabs. Tous droits réservés.
+    </footer>
+  </div>
 </body>
 </html>
