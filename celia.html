@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ordres de Mission — Oral Lieutenant 1re Classe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --smoke-black:#161210;
+    --panel:#221b17;
+    --panel-2:#2c2420;
+    --ember:#e8542e;
+    --ember-bright:#ff7a3d;
+    --amber:#f2a340;
+    --brass:#c9a15a;
+    --paper:#f3ead9;
+    --paper-dim:#cbbfa9;
+    --line: rgba(201,161,90,0.28);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse 800px 500px at 50% -10%, rgba(232,84,46,0.16), transparent 60%),
+      radial-gradient(ellipse 600px 400px at 90% 100%, rgba(242,163,64,0.08), transparent 60%),
+      var(--smoke-black);
+    color:var(--paper);
+    font-family:'Oswald', sans-serif;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:28px 16px 60px;
+    overflow-x:hidden;
+  }
+
+  /* embers rising */
+  .embers{position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden;}
+  .ember-particle{
+    position:absolute; bottom:-10px; border-radius:50%;
+    background:var(--ember-bright);
+    box-shadow:0 0 6px 2px rgba(255,122,61,0.7);
+    animation: rise linear infinite;
+    opacity:0.7;
+  }
+  @keyframes rise{
+    0%{ transform:translateY(0) translateX(0); opacity:0.8;}
+    90%{opacity:0.5;}
+    100%{ transform:translateY(-110vh) translateX(var(--drift,20px)); opacity:0;}
+  }
+
+  header{
+    position:relative; z-index:1;
+    text-align:center;
+    margin-bottom:6px;
+  }
+  .eyebrow{
+    font-family:'Oswald',sans-serif;
+    letter-spacing:0.35em;
+    font-size:12px;
+    color:var(--brass);
+    text-transform:uppercase;
+    margin-bottom:6px;
+  }
+  h1{
+    font-family:'Bebas Neue', sans-serif;
+    font-size:clamp(34px,7vw,58px);
+    letter-spacing:0.04em;
+    margin:0;
+    color:var(--paper);
+    text-shadow: 0 0 18px rgba(232,84,46,0.35);
+  }
+  h1 span{color:var(--ember-bright);}
+  .subtitle{
+    color:var(--paper-dim);
+    font-size:14px;
+    margin-top:8px;
+    font-family:'Source Serif 4', serif;
+    font-style:italic;
+  }
+
+  .deckzone{
+    position:relative; z-index:1;
+    width:100%;
+    max-width:480px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin-top:22px;
+  }
+
+  .stage{
+    position:relative;
+    width:100%;
+    max-width:380px;
+    aspect-ratio: 5/7;
+    perspective: 1600px;
+  }
+
+  /* stack of cards behind, suggesting a deck */
+  .stack-deco{
+    position:absolute; inset:0;
+    border-radius:18px;
+    background:linear-gradient(155deg,var(--panel-2),var(--panel));
+    border:1px solid var(--line);
+  }
+  .stack-deco.d1{ transform:translate(6px,8px) rotate(2deg); opacity:0.55;}
+  .stack-deco.d2{ transform:translate(12px,16px) rotate(4deg); opacity:0.3;}
+
+  .card{
+    position:absolute; inset:0;
+    border-radius:18px;
+    cursor:pointer;
+    transform-style:preserve-3d;
+    transition: transform 0.7s cubic-bezier(.22,.9,.28,1);
+  }
+  .card.flipped{ transform: rotateY(180deg); }
+  .card.drawing{ animation: drawpulse 0.5s ease; }
+  @keyframes drawpulse{
+    0%{ transform: translateY(0) scale(1) rotateY(0);}
+    30%{ transform: translateY(-14px) scale(1.03) rotateY(0);}
+    100%{ transform: translateY(0) scale(1) rotateY(180deg);}
+  }
+
+  .face{
+    position:absolute; inset:0;
+    border-radius:18px;
+    backface-visibility:hidden;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    box-shadow: 0 18px 40px -12px rgba(0,0,0,0.6), 0 0 0 1px var(--line);
+  }
+
+  /* BACK OF CARD */
+  .back{
+    background:
+      repeating-linear-gradient(135deg, rgba(201,161,90,0.05) 0px, rgba(201,161,90,0.05) 2px, transparent 2px, transparent 14px),
+      linear-gradient(160deg,#2c2420,#1c1613 60%, #241c17);
+    display:flex; align-items:center; justify-content:center;
+    border:1px solid var(--line);
+  }
+  .back-badge{
+    width:64%;
+    aspect-ratio:1;
+    border-radius:50%;
+    border:2px solid var(--brass);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    position:relative;
+  }
+  .back-badge::before{
+    content:"";
+    position:absolute; inset:8px;
+    border-radius:50%;
+    border:1px dashed rgba(201,161,90,0.5);
+  }
+  .back-badge .flame{ font-size:34px; margin-bottom:6px; filter:drop-shadow(0 0 8px rgba(232,84,46,0.6));}
+  .back-badge .btxt{ font-family:'Bebas Neue'; letter-spacing:0.15em; font-size:15px; color:var(--brass); text-align:center; line-height:1.3; padding:0 8px;}
+  .back-hint{
+    position:absolute; bottom:18px; left:0; right:0; text-align:center;
+    font-size:11px; letter-spacing:0.2em; color:var(--paper-dim); text-transform:uppercase;
+  }
+
+  /* FRONT OF CARD */
+  .front{
+    transform: rotateY(180deg);
+    background: linear-gradient(175deg, var(--paper), #e9ddc4 92%);
+    color:#241c17;
+    padding:22px 20px 18px;
+    justify-content:flex-start;
+  }
+  .front::before{
+    content:"";
+    position:absolute; inset:6px;
+    border:1px solid rgba(36,28,23,0.18);
+    border-radius:12px;
+    pointer-events:none;
+  }
+  .front-top{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    margin-bottom:10px;
+  }
+  .theme-tag{
+    font-family:'Oswald'; font-weight:600; font-size:11px;
+    letter-spacing:0.12em; text-transform:uppercase;
+    color:#fff; background:var(--ember);
+    padding:5px 10px; border-radius:4px 4px 4px 0;
+    max-width:70%;
+  }
+  .card-no{
+    font-family:'Bebas Neue'; font-size:13px; color:#8a7a5f;
+    letter-spacing:0.1em;
+  }
+  .acro-seal{
+    align-self:center;
+    margin:6px auto 14px;
+    width:104px; height:104px;
+    border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, var(--amber), var(--ember) 70%);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 0 0 3px #fff, 0 0 0 4px var(--ember), inset 0 2px 8px rgba(0,0,0,0.25);
+  }
+  .acro-seal span{
+    font-family:'Bebas Neue';
+    font-size: clamp(15px, 5.2vw, 22px);
+    color:#fff2e4;
+    letter-spacing:0.03em;
+    text-align:center;
+    line-height:1.05;
+    padding:0 6px;
+    text-shadow: 0 2px 3px rgba(0,0,0,0.35);
+  }
+  .question{
+    font-family:'Source Serif 4', serif;
+    font-size:16px;
+    line-height:1.42;
+    text-align:center;
+    color:#241c17;
+    padding:0 4px;
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .front-bottom{
+    text-align:center;
+    font-family:'Oswald'; font-size:10px; letter-spacing:0.18em;
+    color:#8a7a5f; text-transform:uppercase;
+    padding-top:8px; border-top:1px solid rgba(36,28,23,0.15);
+  }
+
+  .controls{
+    display:flex; gap:14px; margin-top:26px; z-index:1; position:relative;
+  }
+  button{
+    font-family:'Oswald'; font-weight:600; letter-spacing:0.08em;
+    text-transform:uppercase; font-size:13px;
+    border-radius:8px; border:none; cursor:pointer;
+    padding:13px 22px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity .2s ease;
+  }
+  button:active{ transform:scale(0.96); }
+  .btn-draw{
+    background: linear-gradient(180deg,var(--ember-bright),var(--ember));
+    color:#fff2e4;
+    box-shadow: 0 8px 20px -6px rgba(232,84,46,0.55);
+  }
+  .btn-draw:disabled{ opacity:0.4; cursor:not-allowed; box-shadow:none;}
+  .btn-reset{
+    background:transparent;
+    color:var(--brass);
+    border:1px solid var(--line);
+  }
+
+  .meter{
+    margin-top:16px; z-index:1; position:relative;
+    display:flex; align-items:center; gap:10px;
+    font-size:12px; letter-spacing:0.12em; color:var(--paper-dim); text-transform:uppercase;
+  }
+  .meter-bar{
+    width:180px; height:6px; border-radius:4px; background:rgba(255,255,255,0.08); overflow:hidden;
+  }
+  .meter-fill{
+    height:100%; background: linear-gradient(90deg,var(--amber),var(--ember)); transition: width 0.4s ease;
+  }
+
+  .empty-msg{
+    z-index:1; position:relative;
+    margin-top:20px; text-align:center; color:var(--paper-dim);
+    font-family:'Source Serif 4', serif; font-style:italic; font-size:14px;
+    max-width:320px;
+  }
+
+  @media (max-width:400px){
+    .question{ font-size:14.5px; }
+    .acro-seal{ width:88px; height:88px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="embers" id="embers"></div>
+
+<header>
+  <div class="eyebrow">DAZ Academy &middot; Oral officier</div>
+  <h1>PREPA <span>SUNSHINE</span> ;-)</h1>
+  <div class="subtitle">30 cartes à tirer au sort — préparation lieutenant 1<sup>re</sup> classe</div>
+</header>
+
+<div class="deckzone">
+  <div class="stage" id="stage">
+    <div class="stack-deco d2"></div>
+    <div class="stack-deco d1"></div>
+    <div class="card" id="card">
+      <div class="face back">
+        <div class="back-badge">
+          <div class="flame">🔥</div>
+          <div class="btxt">STIS &middot; SDIS<br>OFFICIER</div>
+        </div>
+        <div class="back-hint">Tirer la carte</div>
+      </div>
+      <div class="face front">
+        <div class="front-top">
+          <div class="theme-tag" id="themeTag">THÈME</div>
+          <div class="card-no" id="cardNo">01/30</div>
+        </div>
+        <div class="acro-seal"><span id="acroTxt">ACR</span></div>
+        <div class="question" id="questionTxt">Question</div>
+        <div class="front-bottom">Répondez à voix haute &middot; 90 secondes</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn-draw" id="drawBtn">Tirer une carte</button>
+    <button class="btn-reset" id="resetBtn">Rebattre le jeu</button>
+  </div>
+
+  <div class="meter">
+    <span id="meterLabel">30 cartes restantes</span>
+    <div class="meter-bar"><div class="meter-fill" id="meterFill" style="width:100%"></div></div>
+  </div>
+
+  <div class="empty-msg" id="emptyMsg" style="display:none;">
+    Le jeu est épuisé. Rebattez pour reprendre une nouvelle garde.
+  </div>
+</div>
+
+<script>
+const CARDS = [
+  {theme:"FPT", acro:"PPCR", q:"Pouvez-vous m'expliquer ce que signifie PPCR et quel était son objectif ?"},
+  {theme:"FPT", acro:"NBI", q:"Que signifie la NBI et dans quel cas un agent peut-il en bénéficier ?"},
+  {theme:"FPT", acro:"CST", q:"Quelles instances représentatives du personnel connaissez-vous dans la FPT ?"},
+  {theme:"FPT", acro:"DÉONTO", q:"Quelles sont vos obligations déontologiques en tant que fonctionnaire ?"},
+  {theme:"FPT", acro:"DISCIP", q:"Vous devez engager une procédure disciplinaire contre un agent sous vos ordres : quelles étapes suivez-vous ?"},
+  {theme:"FPT", acro:"STAG", q:"Quelle différence faites-vous entre un fonctionnaire stagiaire et un fonctionnaire titulaire ?"},
+  {theme:"FPT", acro:"AVANC", q:"Par quelles voies pouvez-vous accéder au grade de lieutenant de 1re classe ?"},
+
+  {theme:"Sécurité civile", acro:"SDACR", q:"Quel est, selon vous, le rôle du SDACR dans l'organisation d'un SDIS ?"},
+  {theme:"Sécurité civile", acro:"STIS", q:"Vous êtes muté d'un SDIS vers un STIS en collectivité d'outre-mer : quelles différences organisationnelles rencontrez-vous ?"},
+  {theme:"Sécurité civile", acro:"ORSEC", q:"Qu'est-ce que le plan ORSEC ?"},
+  {theme:"Sécurité civile", acro:"CODIS", q:"Vous êtes adjoint au chef de centre, le RI du SDIS interdit l'alcool dans l'enceinte de ses bâtiments, le caporal « X » vient vous prévenir qu'il a vu des bouteilles de digestifs dans le casier du Sergent B. Que décidez-vous ou quelle décision préconisez-vous et pourquoi ?"},
+  {theme:"Sécurité civile", acro:"COS", q:"En tant que premier officier sur les lieux, à partir de quand endossez-vous la fonction de COS ?"},
+  {theme:"Sécurité civile", acro:"NRBC", q:"Vous êtes alerté pour une fuite de produit chimique en zone industrielle : comment structurez-vous le zonage de l'intervention ?"},
+
+  {theme:"Gestion opérationnelle", acro:"MGO", q:"Pouvez-vous citer les étapes de la Marche Générale des Opérations ?"},
+  {theme:"Gestion opérationnelle", acro:"USAR", q:"Que signifie USAR et quelles sont les manoeuvres de l'équipier ?"},
+  {theme:"Gestion opérationnelle", acro:"ARI", q:"Quelles règles de sécurité respectez-vous lors de l'engagement en ARI de vos équipes ?"},
+  {theme:"Gestion opérationnelle", acro:"GOC", q:"Vous venez d'obtenir votre GOC 4 : quelles nouvelles responsabilités cela vous confère-t-il en tant que chef de colonne ?"},
+  {theme:"Gestion opérationnelle", acro:"CDG", q:"Vous êtes chef de groupe et arrivez en renfort sur un feu déjà engagé par un chef d'agrès : quel est votre premier réflexe ?"},
+
+  {theme:"Management", acro:"CMDT", q:"Deux agents sous votre autorité entrent en conflit ouvert pendant une garde : comment intervenez-vous ?"},
+  {theme:"Management", acro:"RETEX", q:"Après une intervention difficile, comment organisez-vous le retour d'expérience avec votre équipe ?"},
+  {theme:"Management", acro:"LÉGIT", q:"Comment articulez-vous autorité hiérarchique et légitimité opérationnelle face à des sapeurs-pompiers plus expérimentés que vous ?"},
+  {theme:"Management", acro:"DÉCIS", q:"Vous devez faire appliquer une décision impopulaire prise par votre hiérarchie : comment la présentez-vous à votre équipe ?"},
+  {theme:"Management", acro:"STRESS", q:"Un de vos agents montre des signes de stress opérationnel post-intervention : quelle est votre posture d'officier ?"},
+
+  {theme:"Prévention incendie", acro:"ERP", q:"Quelles catégories d'ERP connaissez-vous et en quoi cela influence-t-il votre analyse de risque ?"},
+  {theme:"Prévention incendie", acro:"AP2/PRV2", q:"Quelle différence faites-vous entre les qualifications AP2 et PRV2 pour siéger en commission de sécurité ?"},
+  {theme:"Prévention incendie", acro:"IGH", q:"Que veut dire IGH ? En tant que chef de groupe intervenant sur un IGH, quelles seraient vos premières préoccupations pour vos équipes ?"},
+
+  {theme:"Éthique & posture", acro:"SERV PUB", q:"Comment définissez-vous, dans vos propres mots, le sens du service public appliqué à votre métier ?"},
+  {theme:"Éthique & posture", acro:"EXEMPL", q:"Vous constatez qu'un collègue gradé ne respecte pas une consigne de sécurité devant les jeunes recrues : comment réagissez-vous ?"},
+  {theme:"Éthique & posture", acro:"ENGAGE", q:"Qu'est-ce qui, selon vous, distingue l'engagement d'un sapeur-pompier professionnel de celui d'un simple salarié ?"},
+  {theme:"Éthique & posture", acro:"TRANSM", q:"Comment transmettez-vous les valeurs du métier à une jeune recrue que vous encadrez ?"}
+];
+
+let deck = [];
+let drawnCount = 0;
+const total = CARDS.length;
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function resetDeck(){
+  deck = shuffle(CARDS);
+  drawnCount = 0;
+  updateMeter();
+  const card = document.getElementById('card');
+  card.classList.remove('flipped','drawing');
+  document.getElementById('emptyMsg').style.display = 'none';
+  document.getElementById('drawBtn').disabled = false;
+  document.getElementById('drawBtn').textContent = 'Tirer une carte';
+}
+
+function updateMeter(){
+  const remaining = deck.length;
+  document.getElementById('meterLabel').textContent = remaining + ' carte' + (remaining>1?'s':'') + ' restante' + (remaining>1?'s':'');
+  document.getElementById('meterFill').style.width = (remaining/total*100) + '%';
+}
+
+function drawCard(){
+  if(deck.length === 0) return;
+  const card = document.getElementById('card');
+  const data = deck.pop();
+  drawnCount++;
+
+  document.getElementById('themeTag').textContent = data.theme;
+  document.getElementById('acroTxt').textContent = data.acro;
+  document.getElementById('questionTxt').textContent = data.q;
+  document.getElementById('cardNo').textContent = String(drawnCount).padStart(2,'0') + '/' + total;
+
+  card.classList.remove('flipped');
+  void card.offsetWidth; // reflow
+  card.classList.add('drawing');
+  setTimeout(()=>{ card.classList.add('flipped'); }, 20);
+
+  updateMeter();
+  if(deck.length === 0){
+    document.getElementById('drawBtn').disabled = true;
+    document.getElementById('emptyMsg').style.display = 'block';
+  }
+}
+
+document.getElementById('card').addEventListener('click', ()=>{
+  const card = document.getElementById('card');
+  if(!card.classList.contains('flipped') && deck.length > 0){
+    drawCard();
+  }
+});
+document.getElementById('drawBtn').addEventListener('click', drawCard);
+document.getElementById('resetBtn').addEventListener('click', resetDeck);
+
+// ambient embers
+function spawnEmbers(){
+  const container = document.getElementById('embers');
+  const count = 22;
+  for(let i=0;i<count;i++){
+    const e = document.createElement('div');
+    e.className = 'ember-particle';
+    const size = 2 + Math.random()*3;
+    e.style.width = size+'px';
+    e.style.height = size+'px';
+    e.style.left = Math.random()*100 + 'vw';
+    e.style.setProperty('--drift', (Math.random()*60-30)+'px');
+    const dur = 6 + Math.random()*8;
+    e.style.animationDuration = dur+'s';
+    e.style.animationDelay = (Math.random()*dur)+'s';
+    container.appendChild(e);
+  }
+}
+spawnEmbers();
+resetDeck();
+</script>
+
+</body>
+</html>
